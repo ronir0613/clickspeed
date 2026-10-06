@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  jsonLd?: object[];
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.href,
+  ogImage = `${SITE.url}/og-default.png`,
+  noIndex = false,
+  jsonLd = [],
+} = Astro.props;
+
+const resolvedTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0A0A0B" />
+
+  <!-- SEO -->
+  <title>{resolvedTitle}</title>
+  <meta name="description" content={description} />
+  {noIndex && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="canonical" href={canonical} />
+
+  <!-- OG / Twitter -->
+  <meta property="og:title" content={resolvedTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={resolvedTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  <!-- Font preloads (WOFF2 critical weights) -->
+  <link rel="preload" as="font" type="font/woff2"
+    href="/fonts/chakra-petch-latin-700-normal.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2"
+    href="/fonts/jetbrains-mono-latin-400-normal.woff2" crossorigin />
+
+  <!-- JSON-LD -->
+  {jsonLd.map(schema => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
+</head>
+<body>
+  <slot />
+</body>
+</html>

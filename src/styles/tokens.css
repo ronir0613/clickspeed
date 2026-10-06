@@ -1,0 +1,47 @@
+/* ============================================================
+   TACTICAL TELEMETRY — Design Tokens
+   Edit this file only. Everything reads from these variables.
+   ============================================================ */
+:root {
+  /* Backgrounds */
+  --bg:       #0A0A0B;
+  --panel:    #111114;
+  --panel-2:  #17171B;
+
+  /* Borders */
+  --line:        #2A2A2F;
+  --line-strong: #3A3A41;
+
+  /* Text */
+  --text:  #ECE9E2;
+  --dim:   #8C8982;
+  --faint: #5A5852;
+
+  /* Accent — amber ONLY */
+  --accent:     #FFB000;
+  --accent-dim: #7A5600;
+
+  /* Danger — faults / errors ONLY */
+  --danger: #FF3B30;
+
+  /* Typography */
+  --font-head: 'Chakra Petch', 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+
+  /* Layout */
+  --rail-w:      240px;
+  --tele-w:      320px;
+  --max-w:       1440px;
+  --gutter:      16px;
+  --grid-cols:   12;
+
+  /* Chamfer sizes */
+  --chamfer-sm:  8px;
+  --chamfer-md:  12px;
+  --chamfer-lg:  16px;
+
+  /* Timing */
+  --t-fast: 80ms;
+  --t-mid:  120ms;
+}

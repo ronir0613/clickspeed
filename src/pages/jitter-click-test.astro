@@ -1,0 +1,56 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['jitter-click-test'];
+const canonicalUrl = `${SITE.url}/jitter-click-test`;
+
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: cfg.title,
+  url: canonicalUrl,
+  description: cfg.metaDescription,
+  applicationCategory: 'Game',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="jitter-click-test"
+  jsonLd={[webAppLd]}
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <CpsTest
+      client:load
+      inputType="click"
+      duration={5}
+      ctaLabel="CLICK TO START JITTER TEST"
+      testId="jitter-click-test"
+    />
+  </div>
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;"></div>
+
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">Jitter Click Test</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>Jitter clicking is a technique where you rapidly vibrate your arm muscles to produce extremely fast mouse clicks — often in the 10–14 CPS range. It originated in Minecraft PvP communities as a way to maximize hit registration. The technique requires tensing your arm while clicking, which causes involuntary micro-vibrations that translate into rapid button activations.</p>
+    <p style="margin-top:12px;color:var(--dim);font-size:0.875rem;"><strong style="color:var(--danger);">⚠ Health Note:</strong> Jitter clicking can cause muscle fatigue, cramping, or RSI over prolonged sessions. Always take breaks and stop immediately if you feel pain.</p>
+    <OtherTests currentSlug="jitter-click-test" />
+    <SiteFooter />
+  </div>
+</TestLayout>

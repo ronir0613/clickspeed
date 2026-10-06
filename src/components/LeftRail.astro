@@ -1,0 +1,142 @@
+---
+import { NAV_TESTS } from '../config/site';
+
+export interface Props {
+  currentSlug: string;
+}
+const { currentSlug } = Astro.props;
+---
+
+<!-- Site logo / wordmark -->
+<div class="rail-header">
+  <a href="/" class="rail-logo">
+    <span class="rail-logo-mark">▣</span>
+    <span class="rail-logo-name">ClickSPEED</span>
+    <span class="rail-logo-tld">.gg</span>
+  </a>
+  <div class="rail-section-label">TESTS</div>
+</div>
+
+<nav aria-label="All tests">
+  {NAV_TESTS.map((test) => (
+    <a
+      href={`/${test.slug}`}
+      class={`rail-nav-item${currentSlug === test.slug ? ' active' : ''}`}
+      aria-current={currentSlug === test.slug ? 'page' : undefined}
+    >
+      <span class="rail-icon" aria-hidden="true">{test.icon}</span>
+      <span class="rail-label">{test.label}</span>
+      <span class="key-badge" aria-hidden="true">{test.keyHint}</span>
+    </a>
+  ))}
+</nav>
+
+<!-- Keyboard hint footer -->
+<div class="rail-footer">
+  <div class="rail-section-label">SHORTCUTS</div>
+  <div class="rail-keys">
+    <span class="key-badge">R</span> retry
+    <span class="key-badge">Esc</span> reset
+    <span class="key-badge">?</span> help
+  </div>
+  <div class="rail-keys">
+    <span class="key-badge">[</span><span class="key-badge">]</span> prev/next
+  </div>
+</div>
+
+<style>
+  .rail-header {
+    padding: 16px 12px 8px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .rail-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    margin-bottom: 12px;
+  }
+  .rail-logo-mark {
+    font-size: 1.25rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .rail-logo-name {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+  .rail-logo-tld {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+  .rail-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .rail-icon {
+    font-size: 0.9rem;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .rail-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rail-footer {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .rail-keys {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--faint);
+  }
+
+  /* Mobile: horizontal scroll strip */
+  @media (max-width: 1024px) {
+    .rail-header { display: none; }
+    .rail-footer { display: none; }
+    nav {
+      display: flex;
+      flex-direction: row;
+      gap: 0;
+      padding: 0;
+      white-space: nowrap;
+    }
+    .rail-nav-item {
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      padding: 8px 12px;
+      flex-shrink: 0;
+    }
+    .rail-nav-item.active {
+      border-bottom-color: var(--accent);
+      border-left: none;
+      background: transparent;
+    }
+    .rail-icon { display: none; }
+    .key-badge  { display: none; }
+  }
+</style>

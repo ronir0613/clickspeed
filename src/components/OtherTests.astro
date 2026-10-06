@@ -1,0 +1,56 @@
+---
+import { NAV_TESTS } from '../config/site';
+
+export interface Props {
+  currentSlug?: string;
+}
+const { currentSlug } = Astro.props;
+const others = NAV_TESTS.filter(t => t.slug !== currentSlug).slice(0, 6);
+---
+
+<section class="other-tests" aria-labelledby="other-tests-heading">
+  <h2 id="other-tests-heading" class="ot-heading">Other Tests</h2>
+  <div class="ot-grid">
+    {others.map(t => (
+      <a href={`/${t.slug}`} class="ot-link">
+        <span class="ot-icon" aria-hidden="true">{t.icon}</span>
+        <span>{t.label}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .other-tests { margin-top: 48px; }
+  .ot-heading {
+    font-size: 0.75rem;
+    color: var(--faint);
+    margin-bottom: 12px;
+  }
+  .ot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ot-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    transition: all var(--t-fast) linear;
+  }
+  .ot-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .ot-icon { font-size: 0.9rem; }
+</style>

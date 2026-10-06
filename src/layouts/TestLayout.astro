@@ -1,0 +1,140 @@
+---
+import Base from './Base.astro';
+import LeftRail from '../components/LeftRail.astro';
+import { SITE } from '../config/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  currentSlug: string;
+  jsonLd?: object[];
+}
+
+const { title, description, canonical, currentSlug, jsonLd } = Astro.props;
+---
+<Base title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div class="console-root">
+    <!-- LEFT RAIL -->
+    <aside class="console-rail" aria-label="Test navigation">
+      <LeftRail currentSlug={currentSlug} />
+    </aside>
+
+    <!-- CENTER + RIGHT stacked -->
+    <div class="console-main">
+      <!-- CENTER ARENA ZONE -->
+      <main class="console-center" id="main-content">
+        <slot name="arena" />
+      </main>
+
+      <!-- RIGHT TELEMETRY PANEL -->
+      <aside class="console-tele" aria-label="Telemetry">
+        <slot name="telemetry" />
+      </aside>
+    </div>
+  </div>
+
+  <!-- SEO COPY — BELOW the console, full width -->
+  <div class="seo-zone">
+    <div class="seo-content">
+      <slot name="seo" />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .console-root {
+    display: flex;
+    height: 100dvh;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Left rail */
+  .console-rail {
+    width: var(--rail-w);
+    flex-shrink: 0;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Center + right */
+  .console-main {
+    flex: 1;
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .console-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow-y: auto;
+    padding: var(--gutter);
+    gap: var(--gutter);
+  }
+
+  .console-tele {
+    width: var(--tele-w);
+    flex-shrink: 0;
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    overflow-y: auto;
+    padding: var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gutter);
+  }
+
+  /* SEO copy zone — sits below the console on scroll */
+  .seo-zone {
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    padding: 48px var(--gutter);
+  }
+  .seo-content {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* ── Mobile / Tablet breakpoints ───────────────────────── */
+  @media (max-width: 1024px) {
+    .console-root {
+      flex-direction: column;
+      height: auto;
+      overflow: visible;
+    }
+    .console-rail {
+      width: 100%;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-direction: row;
+    }
+    .console-main {
+      flex-direction: column;
+    }
+    .console-tele {
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid var(--line);
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 12px var(--gutter);
+      gap: 12px;
+    }
+    .console-center {
+      overflow-y: visible;
+    }
+  }
+</style>

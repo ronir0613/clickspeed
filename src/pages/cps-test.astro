@@ -1,0 +1,141 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['cps-test'];
+const canonicalUrl = `${SITE.url}/cps-test`;
+
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: cfg.title,
+  url: canonicalUrl,
+  description: cfg.metaDescription,
+  applicationCategory: 'Game',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is a good CPS score?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Average clicking speed is 6–7 CPS. Gamers who practice regular clicking often achieve 10–14 CPS. Anything above 14 CPS is considered elite/inhuman and may require special techniques like jitter or butterfly clicking.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I improve my CPS?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Regular practice, using a lightweight gaming mouse, and learning techniques like jitter clicking or butterfly clicking can all increase your CPS. Keeping your arm relaxed and clicking from the finger tip rather than the whole hand also helps.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does the test start immediately?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No — the timer starts only on your first click. You can take as long as you need to get ready.',
+      },
+    },
+  ],
+};
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="cps-test"
+  jsonLd={[webAppLd, faqLd]}
+>
+  <!-- ARENA + TELEMETRY (React island) -->
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column; gap:0;">
+    <CpsTest
+      client:load
+      inputType="click"
+      duration={5}
+      ctaLabel="CLICK TO START"
+      testId="cps-test"
+    />
+  </div>
+
+  <!-- Telemetry slot is handled inside CpsTest, but we need a stub here -->
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;">
+    <!-- React island fills this via portal -->
+  </div>
+
+  <!-- SEO COPY -->
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page" style="color:var(--text);">CPS Test</li>
+      </ol>
+    </nav>
+
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>A CPS test (clicks-per-second test) measures how many times you can click a mouse button within a given time frame. It is the primary benchmark for gaming performance in titles like Minecraft PvP, where higher CPS translates directly to faster combat hits. Our test uses <code>performance.now()</code> for sub-millisecond precision and starts the clock on your very first click, not on page load — so your warmup never counts against you.</p>
+
+    <h3 style="margin-top:24px;margin-bottom:8px;">Average CPS by Skill Level</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:0.875rem;font-family:var(--font-mono);">
+      <thead>
+        <tr style="border-bottom:1px solid var(--line-strong);">
+          <th style="text-align:left;padding:6px 12px 6px 0;color:var(--faint);">TIER</th>
+          <th style="text-align:left;padding:6px 12px;color:var(--faint);">CPS RANGE</th>
+          <th style="text-align:left;padding:6px 0;color:var(--faint);">WHO?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {[
+          ['IDLE',     '0 – 3',  'Typing, not trying'],
+          ['STANDARD', '3 – 7',  'Casual gamers'],
+          ['FAST',     '7 – 10', 'Active PvP players'],
+          ['ELITE',    '10 – 14','Top 5% of players'],
+          ['INHUMAN',  '14+',    'Jitter / butterfly clickers'],
+        ].map(([tier, range, who]) => (
+          <tr style="border-bottom:1px solid var(--line);">
+            <td style="padding:6px 12px 6px 0;color:var(--accent);">{tier}</td>
+            <td style="padding:6px 12px;color:var(--text);">{range}</td>
+            <td style="padding:6px 0;color:var(--dim);">{who}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:24px;margin-bottom:8px;">Tips to Improve Your CPS</h3>
+    <ul style="padding-left:20px;color:var(--dim);line-height:1.8;">
+      <li>Use a lightweight gaming mouse with a low actuation force switch.</li>
+      <li>Click from your fingertip, not the whole hand — reduces fatigue.</li>
+      <li>Keep your wrist and forearm relaxed to sustain high click rates.</li>
+      <li>Practice in short bursts (5-second intervals) rather than long sessions.</li>
+      <li>For advanced techniques, try our <a href="/jitter-click-test">Jitter Click Test</a> and <a href="/butterfly-click-test">Butterfly Click Test</a>.</li>
+    </ul>
+
+    <h2 style="margin-top:32px;margin-bottom:16px;font-size:1rem;">Frequently Asked Questions</h2>
+    {[
+      ['What is a good CPS score?', 'Average clicking speed is 6–7 CPS. Gamers who practice often achieve 10–14 CPS. Anything above 14 CPS is elite.'],
+      ['How do I improve my CPS?', 'Practice short sessions, use a light gaming mouse, and keep your hand relaxed. Advanced techniques like jitter clicking can push scores higher.'],
+      ['Does the timer start when I open the page?', 'No. The timer starts only on your first click. You have as much warmup time as you need.'],
+    ].map(([q, a]) => (
+      <details style="border-bottom:1px solid var(--line);padding:12px 0;">
+        <summary style="font-family:var(--font-head);font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text);cursor:pointer;">{q}</summary>
+        <p style="margin-top:8px;color:var(--dim);font-size:0.9rem;">{a}</p>
+      </details>
+    ))}
+
+    <OtherTests currentSlug="cps-test" />
+    <SiteFooter />
+  </div>
+</TestLayout>

@@ -1,0 +1,44 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['right-click-test'];
+const canonicalUrl = `${SITE.url}/right-click-test`;
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="right-click-test"
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <CpsTest
+      client:load
+      inputType="rightclick"
+      duration={5}
+      ctaLabel="RIGHT-CLICK TO START"
+      testId="right-click-test"
+    />
+  </div>
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;"></div>
+
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">Right-Click Test</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>Right-click speed is less commonly trained but critical in games that map abilities or block placement to the right mouse button. The context menu is suppressed inside the test arena so right-clicks register as inputs rather than opening a browser menu. Outside the arena, normal right-click behavior is preserved.</p>
+    <p style="margin-top:12px;">Most players are noticeably slower with their right button than their left — average right-click CPS is 4–6 versus 6–8 for left. Dedicated training can close this gap significantly.</p>
+    <OtherTests currentSlug="right-click-test" />
+    <SiteFooter />
+  </div>
+</TestLayout>

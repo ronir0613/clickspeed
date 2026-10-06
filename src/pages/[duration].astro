@@ -1,0 +1,74 @@
+---
+import TestLayout from '../../layouts/TestLayout.astro';
+import CpsTest from '../../islands/CpsTest';
+import OtherTests from '../../components/OtherTests.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { SITE } from '../../config/site';
+import { CPS_DURATION_PAGES } from '../../config/tests';
+
+export function getStaticPaths() {
+  return CPS_DURATION_PAGES.map(p => ({
+    params: { duration: p.slug },
+    props: { durationData: p },
+  }));
+}
+
+interface Props {
+  durationData: typeof CPS_DURATION_PAGES[number];
+}
+
+const { durationData } = Astro.props;
+const canonicalUrl = `${SITE.url}/${durationData.slug}`;
+const title = `${durationData.label} — CPS Test`;
+const description = `Take the ${durationData.duration}-second CPS test. Click as fast as you can for exactly ${durationData.duration} second${durationData.duration > 1 ? 's' : ''}. See your CPS score, tier rating, and personal best.`;
+---
+
+<TestLayout
+  title={title}
+  description={description}
+  canonical={canonicalUrl}
+  currentSlug="cps-test"
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <CpsTest
+      client:load
+      inputType="click"
+      duration={durationData.duration}
+      ctaLabel="CLICK TO START"
+      testId={`cps-${durationData.duration}s`}
+    />
+  </div>
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;"></div>
+
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href="/cps-test" style="color:var(--dim);">CPS Test</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page" style="color:var(--text);">{durationData.label}</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">
+      {durationData.duration}-Second CPS Test
+    </h2>
+    <p>
+      The {durationData.duration}-second CPS test is preset to run for exactly {durationData.duration} second{durationData.duration > 1 ? 's' : ''} from your first click.
+      {durationData.duration <= 2 && ' Short duration tests reward explosive burst speed — your absolute peak click rate.'}
+      {durationData.duration === 5 && ' 5 seconds is the most commonly used CPS benchmark, balancing burst speed with a small endurance component.'}
+      {durationData.duration >= 10 && durationData.duration < 30 && ` The ${durationData.duration}-second test introduces endurance — sustaining high CPS for longer reveals whether your clicking technique is efficient.`}
+      {durationData.duration >= 30 && ` The ${durationData.duration}-second test is a true endurance challenge. Consistency and stamina matter as much as raw speed.`}
+    </p>
+    <p style="margin-top:12px;"><a href="/cps-test">← Back to main CPS Test</a> | Also try other durations:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+      {CPS_DURATION_PAGES.filter(p => p.duration !== durationData.duration).map(p => (
+        <a href={`/${p.slug}`} style="font-family:var(--font-mono);font-size:0.75rem;border:1px solid var(--line);padding:4px 10px;color:var(--dim);text-decoration:none;" class="btn">
+          {p.duration}s
+        </a>
+      ))}
+    </div>
+    <OtherTests currentSlug="cps-test" />
+    <SiteFooter />
+  </div>
+</TestLayout>

@@ -1,0 +1,2 @@
+# ads.txt placeholder — add publisher lines here when monetization is enabled
+# Example: google.com, pub-XXXXXXXXXX, DIRECT, f08c47fec0942fa0

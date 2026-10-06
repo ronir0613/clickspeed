@@ -1,0 +1,288 @@
+---
+import Base from '../layouts/Base.astro';
+import TestGrid from '../components/TestGrid.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+  },
+];
+---
+
+<Base
+  title={`${SITE.name} — Free Click Speed & Reflex Tests`}
+  description={SITE.description}
+  jsonLd={jsonLd}
+>
+  <!-- Site header -->
+  <header class="home-header">
+    <div class="home-header-inner">
+      <div class="home-brand">
+        <span class="home-brand-mark" aria-hidden="true">▣</span>
+        <div>
+          <div class="home-brand-name">ClickSPEED<span class="home-brand-gg">.gg</span></div>
+          <div class="home-brand-tag">PRECISION REFLEX INSTRUMENTS</div>
+        </div>
+      </div>
+      <nav class="home-nav" aria-label="Main navigation">
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="home-hero bg-grid" aria-labelledby="hero-heading">
+    <div class="home-hero-inner">
+      <div class="hero-label section-label">FREE BROWSER-BASED TOOLS</div>
+      <h1 id="hero-heading" class="hero-h1">
+        Test Your<br/>
+        <span class="hero-accent">Click Speed</span><br/>
+        & Reflexes
+      </h1>
+      <p class="hero-sub">
+        Eight precision instruments for measuring CPS, reaction time, aim accuracy and more.
+        Fully client-side. No accounts. No installs. Starts on first click.
+      </p>
+      <div class="hero-stats" aria-hidden="true">
+        <div class="hs-item">
+          <span class="hs-num">8</span>
+          <span class="hs-label">TESTS</span>
+        </div>
+        <div class="hs-sep">·</div>
+        <div class="hs-item">
+          <span class="hs-num">∞</span>
+          <span class="hs-label">FREE</span>
+        </div>
+        <div class="hs-sep">·</div>
+        <div class="hs-item">
+          <span class="hs-num">0</span>
+          <span class="hs-label">ACCOUNTS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Test grid -->
+  <section class="home-tests" aria-labelledby="tests-heading">
+    <div class="home-tests-inner">
+      <div class="tests-heading-row">
+        <h2 id="tests-heading" class="tests-heading">SELECT TEST</h2>
+        <div class="tests-hint section-label">← USE ARROW KEYS OR CLICK</div>
+      </div>
+      <TestGrid />
+    </div>
+  </section>
+
+  <!-- Feature bullets -->
+  <section class="home-features" aria-labelledby="features-heading">
+    <div class="home-features-inner">
+      <h2 id="features-heading" class="feat-heading">Built for Precision</h2>
+      <div class="feat-grid">
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">⏱</div>
+          <div class="feat-title">performance.now() Timing</div>
+          <p class="feat-desc">Sub-millisecond timestamps. Timers start on your first input, not on page load.</p>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">📊</div>
+          <div class="feat-title">Live Telemetry</div>
+          <p class="feat-desc">Live CPS graph, peak detection, consistency scores and per-run history.</p>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">🏆</div>
+          <div class="feat-title">Tier Ratings</div>
+          <p class="feat-desc">From STANDARD to INHUMAN — calibrated thresholds for every test type.</p>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">💾</div>
+          <div class="feat-title">Personal Bests</div>
+          <p class="feat-desc">Stored in your browser via localStorage. No account needed, never shared.</p>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">🖱</div>
+          <div class="feat-title">Desktop-First</div>
+          <p class="feat-desc">Mouse + keyboard native. Multi-touch aware for phone users too.</p>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon" aria-hidden="true">🔒</div>
+          <div class="feat-title">Fully Client-Side</div>
+          <p class="feat-desc">Zero backend. No data leaves your device. No trackers, no accounts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SiteFooter />
+</Base>
+
+<style>
+  /* ── Header ─────────────────────────────────────────────── */
+  .home-header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .home-header-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 12px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .home-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .home-brand-mark {
+    font-size: 1.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .home-brand-name {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .home-brand-gg { color: var(--accent); }
+  .home-brand-tag {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--faint);
+    margin-top: 2px;
+  }
+  .home-nav {
+    display: flex;
+    gap: 20px;
+  }
+  .home-nav a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+  }
+  .home-nav a:hover { color: var(--accent); }
+
+  /* ── Hero ───────────────────────────────────────────────── */
+  .home-hero {
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .home-hero-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 80px var(--gutter) 64px;
+  }
+  .hero-h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 1;
+    margin: 16px 0 24px;
+  }
+  .hero-accent { color: var(--accent); }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--dim);
+    max-width: 540px;
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hs-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .hs-num {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .hs-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .hs-sep {
+    color: var(--line-strong);
+    font-size: 1.2rem;
+  }
+
+  /* ── Test grid section ───────────────────────────────────── */
+  .home-tests {
+    border-bottom: 1px solid var(--line);
+  }
+  .home-tests-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 40px var(--gutter);
+  }
+  .tests-heading-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .tests-heading {
+    font-size: 0.75rem;
+    color: var(--dim);
+  }
+  .tests-hint { display: none; }
+  @media (min-width: 1024px) { .tests-hint { display: block; } }
+
+  /* ── Features ───────────────────────────────────────────── */
+  .home-features {
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+  }
+  .home-features-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 48px var(--gutter);
+  }
+  .feat-heading {
+    font-size: 0.75rem;
+    color: var(--faint);
+    margin-bottom: 24px;
+  }
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+  }
+  .feat-item { display: flex; flex-direction: column; gap: 6px; }
+  .feat-icon { font-size: 1.2rem; }
+  .feat-title {
+    font-family: var(--font-head);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text);
+  }
+  .feat-desc { font-size: 0.875rem; color: var(--dim); line-height: 1.5; }
+</style>

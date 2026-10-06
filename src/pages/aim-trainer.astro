@@ -1,0 +1,66 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import AimTrainer from '../islands/AimTrainer';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['aim-trainer'];
+const canonicalUrl = `${SITE.url}/aim-trainer`;
+
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: cfg.title,
+  url: canonicalUrl,
+  description: cfg.metaDescription,
+  applicationCategory: 'Game',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="aim-trainer"
+  jsonLd={[webAppLd]}
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <AimTrainer client:load />
+  </div>
+  <div slot="telemetry" style="height:100%;">
+    <div class="section-label">AIM TIERS</div>
+    <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px;">
+      {[
+        ['INHUMAN',  '95–100%'],
+        ['ELITE',    '85–95%'],
+        ['SHARP',    '70–85%'],
+        ['STANDARD', '50–70%'],
+        ['TRAINING', '0–50%'],
+      ].map(([tier, range]) => (
+        <div style="display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1px solid var(--line);">
+          <span style="font-family:var(--font-head);font-size:0.65rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);">{tier}</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--dim);">{range}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">Aim Trainer</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>Aim training has been shown in multiple studies to significantly improve both accuracy and the speed at which you acquire targets. Our browser-based trainer is designed for quick micro-sessions — 30 seconds is enough time to warm up your mouse hand before a competitive session without inducing fatigue.</p>
+    <p style="margin-top:12px;">Targets spawn at random positions and you must click on each one to score a hit. Clicking outside the target counts as a miss. Your accuracy (hits ÷ total attempts) and your average time between hits are both tracked to measure your progress across sessions.</p>
+    <OtherTests currentSlug="aim-trainer" />
+    <SiteFooter />
+  </div>
+</TestLayout>

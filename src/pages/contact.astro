@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+---
+
+<Base title={`Contact — ${SITE.name}`} description={`Contact the ${SITE.name} team with bug reports, suggestions, or partnership inquiries.`}>
+  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
+    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
+      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
+    </nav>
+    <h1>Contact</h1>
+    <p style="margin-top:16px;">Found a bug? Have an idea for a new test? Want to partner with us?</p>
+    <p style="margin-top:12px;">Reach us at: <a href="mailto:hello@clickspeed.gg">hello@clickspeed.gg</a></p>
+    <p style="margin-top:12px;color:var(--dim);font-size:0.875rem;">We read every message and aim to respond within 48 hours.</p>
+  </div>
+  <SiteFooter />
+</Base>

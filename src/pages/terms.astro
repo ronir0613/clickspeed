@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+---
+
+<Base title={`Terms of Service — ${SITE.name}`} description={`Terms of Service for ${SITE.name}. Free to use, no warranty on scores.`}>
+  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
+    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
+      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
+    </nav>
+    <h1>Terms of Service</h1>
+    <p style="margin-top:8px;color:var(--dim);font-size:0.875rem;">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <h2 style="margin-top:32px;font-size:1rem;">Use</h2>
+    <p style="margin-top:8px;">ClickSPEED.gg is provided free of charge for personal, non-commercial use. You may link to our tools freely. You may not scrape, mirror, or resell the service.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Accuracy</h2>
+    <p style="margin-top:8px;">Scores are calculated with sub-millisecond browser precision but are subject to operating system scheduler jitter, browser tab throttling, and hardware differences. Results are for personal benchmarking only and should not be cited as clinical measurements.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Health</h2>
+    <p style="margin-top:8px;">Jitter clicking and high-intensity repetitive clicking techniques carry a risk of repetitive strain injury. Take regular breaks and stop immediately if you experience pain.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Disclaimer</h2>
+    <p style="margin-top:8px;">The service is provided "as is" without warranty of any kind. We are not liable for any injury, hardware damage, or other harm arising from use of these tools.</p>
+  </div>
+  <SiteFooter />
+</Base>

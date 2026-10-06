@@ -1,0 +1,57 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['spacebar-counter'];
+const canonicalUrl = `${SITE.url}/spacebar-counter`;
+
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: cfg.title,
+  url: canonicalUrl,
+  description: cfg.metaDescription,
+  applicationCategory: 'Game',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="spacebar-counter"
+  jsonLd={[webAppLd]}
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <CpsTest
+      client:load
+      inputType="spacebar"
+      duration={5}
+      ctaLabel="PRESS SPACE TO START"
+      testId="spacebar-counter"
+    />
+  </div>
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;"></div>
+
+  <div slot="seo">
+    <h1 style="display:none;">{cfg.h1}</h1>
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page" style="color:var(--text);">Spacebar Counter</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>The spacebar counter measures how many times you can press the spacebar in a given time window. Unlike mouse clicks, spacebar speed is bottlenecked by the spring travel of your keyboard switch and your thumb's stamina. Key auto-repeat is intentionally ignored — every registered press requires a physical key lift and re-press, keeping results honest.</p>
+    <p style="margin-top:12px;">Spacebar speed matters in rhythm games, speedrunning, and any game that maps jump or action to the spacebar. Average players hit 4–7 presses per second; dedicated players can reach 10+.</p>
+    <OtherTests currentSlug="spacebar-counter" />
+    <SiteFooter />
+  </div>
+</TestLayout>

@@ -1,0 +1,98 @@
+---
+import { NAV_TESTS } from '../config/site';
+
+const iconMap: Record<string, string> = {
+  'cps-test': '⊕',
+  'spacebar-counter': '⌨',
+  'jitter-click-test': '⟳',
+  'butterfly-click-test': '◈',
+  'right-click-test': '⊞',
+  'reaction-time-test': '⚡',
+  'aim-trainer': '◎',
+  'mobile-tap-test': '⊡',
+};
+
+const descriptions: Record<string, string> = {
+  'cps-test': 'Clicks per second. Multiple durations. Live peak tracking.',
+  'spacebar-counter': 'Spacebar presses per second. No key repeat cheating.',
+  'jitter-click-test': 'Measure jitter-click technique CPS with live stats.',
+  'butterfly-click-test': 'Two-finger alternating click speed measurement.',
+  'right-click-test': 'Right mouse button CPS — context menu suppressed.',
+  'reaction-time-test': '5-round average reaction time in milliseconds.',
+  'aim-trainer': '30-second precision aim training with accuracy scoring.',
+  'mobile-tap-test': 'Multi-touch tap counter for phones and tablets.',
+};
+---
+
+<div class="test-grid">
+  {NAV_TESTS.map((test) => (
+    <a href={`/${test.slug}`} class="test-card panel chamfer-clip-md" aria-label={`Open ${test.label}`}>
+      <div class="panel-inner">
+        <div class="tc-icon" aria-hidden="true">{iconMap[test.slug]}</div>
+        <div class="tc-label">{test.label}</div>
+        <div class="tc-desc">{descriptions[test.slug]}</div>
+        <div class="tc-cta">START <span aria-hidden="true">→</span></div>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2px;
+  }
+
+  .test-card {
+    text-decoration: none;
+    display: block;
+    transition: translate var(--t-fast) linear;
+  }
+  .test-card:hover {
+    translate: -2px -2px;
+    text-decoration: none;
+  }
+  .test-card:hover .panel-inner {
+    background: var(--panel-2);
+  }
+  .test-card:hover .tc-cta {
+    color: var(--accent);
+  }
+
+  .panel-inner {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 160px;
+  }
+
+  .tc-icon {
+    font-size: 1.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .tc-label {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+  .tc-desc {
+    font-size: 0.8rem;
+    color: var(--dim);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .tc-cta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-top: 4px;
+  }
+</style>

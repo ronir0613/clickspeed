@@ -1,0 +1,44 @@
+---
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { TEST_CONFIGS } from '../config/tests';
+
+const cfg = TEST_CONFIGS['mobile-tap-test'];
+const canonicalUrl = `${SITE.url}/mobile-tap-test`;
+---
+
+<TestLayout
+  title={cfg.title}
+  description={cfg.metaDescription}
+  canonical={canonicalUrl}
+  currentSlug="mobile-tap-test"
+>
+  <div slot="arena" style="height:100%; display:flex; flex-direction:column;">
+    <CpsTest
+      client:load
+      inputType="touch"
+      duration={5}
+      ctaLabel="TAP TO START"
+      testId="mobile-tap-test"
+    />
+  </div>
+  <div slot="telemetry" id="telemetry-mount" style="height:100%;"></div>
+
+  <div slot="seo">
+    <nav aria-label="Breadcrumb">
+      <ol style="display:flex;gap:8px;list-style:none;font-size:0.75rem;color:var(--faint);font-family:var(--font-mono);">
+        <li><a href="/" style="color:var(--dim);">Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">Mobile Tap Test</li>
+      </ol>
+    </nav>
+    <h2 style="font-size:1.25rem;margin-top:24px;margin-bottom:12px;">{cfg.copyHeadline}</h2>
+    <p>Desktop clicking is limited to a single button at a time, but touchscreens can register multiple simultaneous contact points. Our mobile tap test counts every pointer event, meaning tapping with two fingers simultaneously counts as two hits. This makes it the ideal benchmark for mobile gaming where multi-touch button mashing is common.</p>
+    <p style="margin-top:12px;">The test uses the Pointer Events API so it works on any touch device regardless of OS. <code>touch-action: manipulation</code> is set on the arena to eliminate the 300ms double-tap zoom delay, giving you true immediacy from first touch.</p>
+    <OtherTests currentSlug="mobile-tap-test" />
+    <SiteFooter />
+  </div>
+</TestLayout>

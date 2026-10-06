@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+---
+
+<Base title={`Privacy Policy — ${SITE.name}`} description={`Privacy Policy for ${SITE.name}. We collect no personal data. All scores stored locally in your browser.`}>
+  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
+    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
+      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
+    </nav>
+    <h1>Privacy Policy</h1>
+    <p style="margin-top:8px;color:var(--dim);font-size:0.875rem;">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <h2 style="margin-top:32px;font-size:1rem;">Data We Collect</h2>
+    <p style="margin-top:8px;"><strong>None.</strong> ClickSPEED.gg does not collect, transmit, or store any personal information on any server. All test scores and personal bests are stored exclusively in your browser's <code>localStorage</code> and never leave your device.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Cookies</h2>
+    <p style="margin-top:8px;">We do not set any cookies.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Third-Party Services</h2>
+    <p style="margin-top:8px;">We self-host all fonts. No third-party analytics, advertising scripts, or tracking pixels are loaded by default.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">localStorage</h2>
+    <p style="margin-top:8px;">Personal bests are stored in your browser's localStorage under keys prefixed with <code>pb-</code>. You can clear these at any time through your browser's settings.</p>
+    <h2 style="margin-top:24px;font-size:1rem;">Contact</h2>
+    <p style="margin-top:8px;">Questions? See our <a href="/contact">contact page</a>.</p>
+  </div>
+  <SiteFooter />
+</Base>
