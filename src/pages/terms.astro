@@ -1,24 +1,49 @@
 ---
-import Base from '../layouts/Base.astro';
-import SiteFooter from '../components/SiteFooter.astro';
+import ContentPage from '../components/ContentPage.astro';
 import { SITE } from '../config/site';
 ---
 
-<Base title={`Terms of Service — ${SITE.name}`} description={`Terms of Service for ${SITE.name}. Free to use, no warranty on scores.`}>
-  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
-    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
-      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
-    </nav>
-    <h1>Terms of Service</h1>
-    <p style="margin-top:8px;color:var(--dim);font-size:0.875rem;">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-    <h2 style="margin-top:32px;font-size:1rem;">Use</h2>
-    <p style="margin-top:8px;">ClickSPEED.gg is provided free of charge for personal, non-commercial use. You may link to our tools freely. You may not scrape, mirror, or resell the service.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Accuracy</h2>
-    <p style="margin-top:8px;">Scores are calculated with sub-millisecond browser precision but are subject to operating system scheduler jitter, browser tab throttling, and hardware differences. Results are for personal benchmarking only and should not be cited as clinical measurements.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Health</h2>
-    <p style="margin-top:8px;">Jitter clicking and high-intensity repetitive clicking techniques carry a risk of repetitive strain injury. Take regular breaks and stop immediately if you experience pain.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Disclaimer</h2>
-    <p style="margin-top:8px;">The service is provided "as is" without warranty of any kind. We are not liable for any injury, hardware damage, or other harm arising from use of these tools.</p>
-  </div>
-  <SiteFooter />
-</Base>
+<ContentPage
+  title="Terms and Conditions"
+  eyebrow="PLEASE READ BEFORE USE"
+  summary="These terms cover your access to ClickSPEED.gg and use of its browser-based tools. By using the site, you agree to follow them."
+  description={`Terms and Conditions for using ${SITE.name}, including acceptable use, test results, health and safety, and service availability.`}
+  updated="October 12, 2026"
+>
+  <section>
+    <h2>Using the site</h2>
+    <p>ClickSPEED.gg provides browser-based tools for personal practice, entertainment, and general benchmarking. The tools are currently available without an account or charge. We may add, change, suspend, or discontinue features as the site develops.</p>
+    <p>You may link to the site and use it for lawful purposes. You may not disrupt the service, attempt unauthorized access, introduce malicious code, scrape or overload the site, or misrepresent the tools or their results. Do not copy, republish, sell, or create a competing service from substantial portions of the site without permission.</p>
+  </section>
+
+  <section>
+    <h2>Results and accuracy</h2>
+    <p>Scores are estimates produced by your browser and input device. They can vary with hardware, display refresh rate, operating-system scheduling, browser behavior, network or system load, and other conditions. The results are for practice and personal comparison; they are not clinical, medical, or scientific measurements and should not be treated as a guarantee of gaming performance.</p>
+  </section>
+
+  <section>
+    <h2>Health and safe use</h2>
+    <p>Repeated clicking, rapid tapping, and high-intensity techniques such as jitter clicking may cause discomfort or repetitive strain. Take regular breaks, use a comfortable posture, and stop if you feel pain, numbness, or unusual fatigue. The tools are not a substitute for medical advice.</p>
+  </section>
+
+  <section>
+    <h2>Site materials</h2>
+    <p>The site’s name, visual design, written materials, and software are protected by applicable intellectual-property laws. These terms allow ordinary personal use of the service; they do not transfer ownership or grant permission to reproduce substantial portions of it.</p>
+  </section>
+
+  <section>
+    <h2>Availability and disclaimers</h2>
+    <p>We work to keep the site useful and available, but do not promise uninterrupted access, error-free operation, or that every result will meet a particular purpose. To the extent permitted by applicable law, the site is provided “as is” and “as available,” without warranties that cannot be excluded by law.</p>
+    <p>To the extent permitted by applicable law, ClickSPEED.gg is not responsible for indirect or consequential losses arising from use of, or inability to use, the site. Nothing in these terms excludes rights or liability that cannot legally be excluded or limited.</p>
+  </section>
+
+  <section>
+    <h2>Changes to these terms</h2>
+    <p>We may revise these terms as the service changes. The “Last updated” date above identifies the latest revision. Continued use after an update means you accept the revised terms, to the extent permitted by applicable law.</p>
+  </section>
+
+  <section>
+    <h2>Questions</h2>
+    <p>For questions about these terms, email <a href="mailto:curatedclass13@gmail.com">curatedclass13@gmail.com</a>.</p>
+  </section>
+</ContentPage>

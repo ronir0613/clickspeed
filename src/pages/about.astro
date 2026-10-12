@@ -1,22 +1,33 @@
 ---
-import Base from '../layouts/Base.astro';
-import SiteFooter from '../components/SiteFooter.astro';
+import ContentPage from '../components/ContentPage.astro';
 import { SITE } from '../config/site';
 ---
 
-<Base title={`About — ${SITE.name}`} description={`About ${SITE.name}: free, precise browser-based click-speed and reflex testing tools. No accounts, no data collection, fully client-side.`}>
-  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
-    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
-      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
-    </nav>
-    <h1>About ClickSPEED.gg</h1>
-    <p style="margin-top:16px;">ClickSPEED.gg is a collection of free, browser-based precision instruments for measuring click speed, reaction time, and aim accuracy. Every test runs entirely in your browser — no server, no account, no data upload.</p>
-    <h2 style="margin-top:32px;font-size:1rem;">Our Philosophy</h2>
-    <p style="margin-top:8px;">We believe performance tools should be as precise as the people using them. That means <code>performance.now()</code> timing (not <code>Date.now()</code>), timer start on first input (not on page load), and honest anti-cheat (no key auto-repeat on spacebar, fault detection on reaction test).</p>
-    <h2 style="margin-top:32px;font-size:1rem;">Privacy</h2>
-    <p style="margin-top:8px;">Your scores stay in your browser's localStorage. We do not send any data to a server. See our <a href="/privacy">Privacy Policy</a>.</p>
-    <h2 style="margin-top:32px;font-size:1rem;">Contact</h2>
-    <p style="margin-top:8px;">Have a bug report or suggestion? See the <a href="/contact">contact page</a>.</p>
-  </div>
-  <SiteFooter />
-</Base>
+<ContentPage
+  title="About Us"
+  eyebrow="ABOUT THE PROJECT"
+  summary="Free browser-based tools for measuring click speed, reaction time, and aim accuracy—with clear results and no account to create."
+  description={`Learn about ${SITE.name}, our browser-based click speed and reflex tools, how the tests work, and the principles behind the project.`}
+>
+  <section>
+    <h2>What ClickSPEED.gg does</h2>
+    <p>ClickSPEED.gg brings a set of quick, focused performance tests together in one place. You can measure clicks per second, spacebar speed, reaction time, target accuracy, and more, then compare your results with your own personal bests.</p>
+    <p>The tests are designed to start quickly, work in a modern browser, and show the result without requiring a sign-up or software installation.</p>
+  </section>
+
+  <section>
+    <h2>How we approach testing</h2>
+    <p>We aim to make each test straightforward and consistent. Timed tests use the browser's high-resolution performance clock and begin when you provide the first input. The reaction test records early clicks as faults, and the spacebar counter ignores keyboard auto-repeat.</p>
+    <p>Results are useful for personal practice and comparison. They can still vary with your device, input hardware, display refresh rate, browser, and background activity.</p>
+  </section>
+
+  <section>
+    <h2>Privacy by design</h2>
+    <p>Test results are calculated in your browser. Personal bests and your language preference are saved in browser storage so they remain available on that device. We do not require an account. Read the <a href="/privacy">Privacy Policy</a> for details about browser storage, site hosting, and email.</p>
+  </section>
+
+  <section>
+    <h2>Get in touch</h2>
+    <p>Found a problem or have an idea that would make the tools better? Send us a note through the <a href="/contact">Contact page</a>.</p>
+  </section>
+</ContentPage>

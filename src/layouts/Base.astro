@@ -1,6 +1,9 @@
 ---
 import '../styles/global.css';
 import { SITE } from '../config/site';
+import chakraPetch700Url from '@fontsource/chakra-petch/files/chakra-petch-latin-700-normal.woff2?url';
+import jetbrainsMono400Url from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 
 export interface Props {
   title: string;
@@ -52,10 +55,8 @@ const resolvedTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.nam
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
   <!-- Font preloads (WOFF2 critical weights) -->
-  <link rel="preload" as="font" type="font/woff2"
-    href="/fonts/chakra-petch-latin-700-normal.woff2" crossorigin />
-  <link rel="preload" as="font" type="font/woff2"
-    href="/fonts/jetbrains-mono-latin-400-normal.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href={chakraPetch700Url} crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href={jetbrainsMono400Url} crossorigin />
 
   <!-- JSON-LD -->
   {jsonLd.map(schema => (
@@ -63,10 +64,179 @@ const resolvedTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.nam
   ))}
 </head>
 <body>
+  <LanguageSwitcher />
   <slot />
 </body>
 
 <script>
+  import { messages, supportedLanguages, type LanguageCode } from '../i18n/messages';
+
+  const languageStorageKey = 'clickspeed.language';
+  const languageSelect = document.querySelector<HTMLSelectElement>('#site-language');
+  const originalText = new WeakMap<Text, string>();
+  const lastTranslatedText = new WeakMap<Text, string>();
+  const originalAttributes = new WeakMap<Element, Map<string, string>>();
+  const lastTranslatedAttributes = new WeakMap<Element, Map<string, string>>();
+  const translatedTextNodes = new Set<Text>();
+  const translatedAttributes = new Map<Element, Set<string>>();
+  const validLanguages = new Set<string>(supportedLanguages.map(({ code }) => code));
+  const translationKeys = new Set(Object.values(messages).flatMap((dictionary) => Object.keys(dictionary)));
+  const attributeNames = ['aria-label', 'title', 'placeholder', 'content'] as const;
+
+  const dictionaryFor = (language: LanguageCode): Record<string, string> => language === 'en' ? {} : messages[language];
+  const hasTranslation = (source: string) => {
+    const trimmed = source.trim();
+    return translationKeys.has(trimmed) || /^Round \d+ of \d+$/.test(trimmed) || /^LAST \d+ RUNS$/.test(trimmed) || /^\d+ clicks$/.test(trimmed);
+  };
+
+  const getLanguage = (): LanguageCode => {
+    try {
+      const saved = localStorage.getItem(languageStorageKey);
+      if (saved && validLanguages.has(saved)) return saved as LanguageCode;
+    } catch { /* Storage may be unavailable in private browsing. */ }
+    return 'en';
+  };
+
+  let currentLanguage = getLanguage();
+
+  const translateText = (node: Text, dictionary: Record<string, string>) => {
+    const lastOutput = lastTranslatedText.get(node);
+    let source = originalText.get(node) ?? node.data;
+    // React can reuse a text node for changing English status text or measurements.
+    if (lastOutput !== undefined && node.data !== lastOutput) {
+      source = node.data;
+      originalText.set(node, source);
+    } else if (!originalText.has(node)) originalText.set(node, source);
+    const trimmed = source.trim();
+    let translated = dictionary[trimmed];
+    const roundMatch = trimmed.match(/^Round (\d+) of (\d+)$/);
+    if (!translated && roundMatch && dictionary['ROUND_OF_TEMPLATE']) {
+      translated = dictionary['ROUND_OF_TEMPLATE'].replace('{current}', roundMatch[1]).replace('{total}', roundMatch[2]);
+    }
+    const runMatch = trimmed.match(/^LAST (\d+) RUNS$/);
+    if (!translated && runMatch && dictionary['LAST_RUNS_TEMPLATE']) {
+      translated = dictionary['LAST_RUNS_TEMPLATE'].replace('{count}', runMatch[1]);
+    }
+    const clickMatch = trimmed.match(/^(\d+) clicks$/);
+    if (!translated && clickMatch && dictionary['CLICKS_TEMPLATE']) {
+      translated = dictionary['CLICKS_TEMPLATE'].replace('{count}', clickMatch[1]);
+    }
+    const leading = source.match(/^\s*/)?.[0] ?? '';
+    const trailing = source.match(/\s*$/)?.[0] ?? '';
+    const next = `${leading}${translated ?? trimmed}${trailing}`;
+    if (node.data !== next) node.data = next;
+    lastTranslatedText.set(node, next);
+  };
+
+  const indexText = (node: Text, dictionary = dictionaryFor(currentLanguage)) => {
+    const lastOutput = lastTranslatedText.get(node);
+    let source = originalText.get(node) ?? node.data;
+    if (lastOutput !== undefined && node.data !== lastOutput) {
+      source = node.data;
+      originalText.set(node, source);
+    } else if (!originalText.has(node)) originalText.set(node, source);
+    if (!hasTranslation(source)) return;
+    translatedTextNodes.add(node);
+    translateText(node, dictionary);
+  };
+
+  const translateAttribute = (element: Element, name: string, dictionary: Record<string, string>) => {
+    let attributes = originalAttributes.get(element);
+    if (!attributes) {
+      attributes = new Map();
+      originalAttributes.set(element, attributes);
+    }
+    const lastValues = lastTranslatedAttributes.get(element);
+    let source = attributes.get(name) ?? element.getAttribute(name);
+    if (source === null) return;
+    if (lastValues?.has(name) && element.getAttribute(name) !== lastValues.get(name)) {
+      source = element.getAttribute(name);
+      if (source === null) return;
+      attributes.set(name, source);
+    }
+    if (!attributes.has(name)) attributes.set(name, source);
+    const translated = dictionary[source];
+    const output = translated ?? source;
+    if (element.getAttribute(name) !== output) element.setAttribute(name, output);
+    const outputs = lastTranslatedAttributes.get(element) ?? new Map<string, string>();
+    outputs.set(name, output);
+    lastTranslatedAttributes.set(element, outputs);
+  };
+
+  const indexElement = (element: Element, dictionary = dictionaryFor(currentLanguage)) => {
+    const matches = translatedAttributes.get(element) ?? new Set<string>();
+    for (const name of attributeNames) {
+      if (!element.hasAttribute(name)) continue;
+      translateAttribute(element, name, dictionary);
+      const source = originalAttributes.get(element)?.get(name);
+      if (source && hasTranslation(source)) matches.add(name);
+    }
+    if (matches.size) translatedAttributes.set(element, matches);
+  };
+
+  const indexTree = (root: Node, dictionary = dictionaryFor(currentLanguage)) => {
+    if (root instanceof Text) {
+      indexText(root, dictionary);
+      return;
+    }
+    if (!(root instanceof Element || root instanceof Document || root instanceof DocumentFragment)) return;
+    if (root instanceof Element) indexElement(root, dictionary);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      if (node instanceof Text) indexText(node, dictionary);
+      else if (node instanceof Element) indexElement(node, dictionary);
+    }
+  };
+
+  const applyLanguage = (language: LanguageCode) => {
+    currentLanguage = language;
+    const entry = supportedLanguages.find(({ code }) => code === language)!;
+    const dictionary = dictionaryFor(language);
+    document.documentElement.lang = entry.htmlLang;
+    if (languageSelect) languageSelect.value = language;
+
+    for (const text of translatedTextNodes) {
+      if (text.isConnected) translateText(text, dictionary);
+      else translatedTextNodes.delete(text);
+    }
+    for (const [element, names] of translatedAttributes) {
+      if (!element.isConnected) {
+        translatedAttributes.delete(element);
+        continue;
+      }
+      for (const name of names) translateAttribute(element, name, dictionary);
+    }
+    indexTree(document.head, dictionary);
+  };
+
+  languageSelect?.addEventListener('change', () => {
+    const next = languageSelect.value;
+    if (!validLanguages.has(next)) return;
+    try { localStorage.setItem(languageStorageKey, next); } catch { /* Keep the selection for this page. */ }
+    applyLanguage(next as LanguageCode);
+  });
+
+  const observer = new MutationObserver((records) => {
+    const dictionary = dictionaryFor(currentLanguage);
+    for (const record of records) {
+      if (record.type === 'characterData' && record.target instanceof Text) {
+        if (record.target.data !== lastTranslatedText.get(record.target)) indexText(record.target, dictionary);
+      }
+      if (record.type === 'attributes' && record.target instanceof Element && record.attributeName) {
+        indexElement(record.target, dictionary);
+      }
+      record.addedNodes.forEach((added) => {
+        indexTree(added, dictionary);
+      });
+    }
+  });
+  observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: [...attributeNames] });
+  document.documentElement.lang = supportedLanguages.find(({ code }) => code === currentLanguage)!.htmlLang;
+  if (languageSelect) languageSelect.value = currentLanguage;
+  indexTree(document.head);
+  indexTree(document.body);
+
   document.addEventListener('keydown', (event) => {
     if (window.location.pathname !== '/' || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;

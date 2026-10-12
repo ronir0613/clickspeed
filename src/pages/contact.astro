@@ -1,18 +1,32 @@
 ---
-import Base from '../layouts/Base.astro';
-import SiteFooter from '../components/SiteFooter.astro';
+import ContentPage from '../components/ContentPage.astro';
 import { SITE } from '../config/site';
+
+const contactEmail = 'curatedclass13@gmail.com';
 ---
 
-<Base title={`Contact — ${SITE.name}`} description={`Contact the ${SITE.name} team with bug reports, suggestions, or partnership inquiries.`}>
-  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
-    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
-      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
-    </nav>
-    <h1>Contact</h1>
-    <p style="margin-top:16px;">Found a bug? Have an idea for a new test? Want to partner with us?</p>
-    <p style="margin-top:12px;">Reach us at: <a href="mailto:hello@clickspeed.gg">hello@clickspeed.gg</a></p>
-    <p style="margin-top:12px;color:var(--dim);font-size:0.875rem;">We read every message and aim to respond within 48 hours.</p>
-  </div>
-  <SiteFooter />
-</Base>
+<ContentPage
+  title="Contact Us"
+  eyebrow="WE’RE LISTENING"
+  summary="Questions, bug reports, feedback, and partnership enquiries are welcome. Email is the best way to reach the ClickSPEED.gg team."
+  description={`Contact ${SITE.name} with a bug report, feedback, accessibility issue, or partnership enquiry.`}
+>
+  <section>
+    <h2>How to reach us</h2>
+    <p>Send us an email and include enough detail for us to understand your request. For a bug report, it helps to include the test you were using, your browser and device, and the steps that led to the issue. Please avoid sending passwords or other sensitive information.</p>
+    <div class="contact-card">
+      <p><strong>Email</strong></p>
+      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to expect</h2>
+    <p>We review incoming messages and respond when we can. Response times may vary. We may not be able to reply individually to every suggestion, but feedback helps us prioritize improvements.</p>
+  </section>
+
+  <section>
+    <h2>Privacy when you email us</h2>
+    <p>Your message and the email address you send it from will be visible to us and handled by the email providers involved in sending and receiving it. We use the information to respond and manage the conversation. See our <a href="/privacy">Privacy Policy</a>.</p>
+  </section>
+</ContentPage>

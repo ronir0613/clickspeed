@@ -1,26 +1,62 @@
 ---
-import Base from '../layouts/Base.astro';
-import SiteFooter from '../components/SiteFooter.astro';
+import ContentPage from '../components/ContentPage.astro';
 import { SITE } from '../config/site';
+
+const contactEmail = 'curatedclass13@gmail.com';
 ---
 
-<Base title={`Privacy Policy — ${SITE.name}`} description={`Privacy Policy for ${SITE.name}. We collect no personal data. All scores stored locally in your browser.`}>
-  <div style="max-width:760px;margin:0 auto;padding:48px 16px;">
-    <nav aria-label="Breadcrumb" style="margin-bottom:24px;">
-      <a href="/" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--dim);">← Home</a>
-    </nav>
-    <h1>Privacy Policy</h1>
-    <p style="margin-top:8px;color:var(--dim);font-size:0.875rem;">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-    <h2 style="margin-top:32px;font-size:1rem;">Data We Collect</h2>
-    <p style="margin-top:8px;"><strong>None.</strong> ClickSPEED.gg does not collect, transmit, or store any personal information on any server. All test scores and personal bests are stored exclusively in your browser's <code>localStorage</code> and never leave your device.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Cookies</h2>
-    <p style="margin-top:8px;">We do not set any cookies.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Third-Party Services</h2>
-    <p style="margin-top:8px;">We self-host all fonts. No third-party analytics, advertising scripts, or tracking pixels are loaded by default.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">localStorage</h2>
-    <p style="margin-top:8px;">Personal bests are stored in your browser's localStorage under keys prefixed with <code>pb-</code>. You can clear these at any time through your browser's settings.</p>
-    <h2 style="margin-top:24px;font-size:1rem;">Contact</h2>
-    <p style="margin-top:8px;">Questions? See our <a href="/contact">contact page</a>.</p>
-  </div>
-  <SiteFooter />
-</Base>
+<ContentPage
+  title="Privacy Policy"
+  eyebrow="YOUR DATA, EXPLAINED"
+  summary="This policy explains what information is handled when you use ClickSPEED.gg, what stays in your browser, and how to contact us about privacy."
+  description={`Privacy Policy for ${SITE.name}: browser storage, test results, website hosting, email communications, and your choices.`}
+  updated="October 12, 2026"
+>
+  <section>
+    <h2>Who we are</h2>
+    <p>ClickSPEED.gg operates this website and its browser-based tests. For questions about this policy or a privacy request, contact <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
+  </section>
+
+  <section>
+    <h2>Information stored in your browser</h2>
+    <p>The tests calculate scores in your browser. The site uses browser local storage to keep personal best scores and your language selection on that device. These values are not sent to ClickSPEED.gg by the test interface.</p>
+    <ul>
+      <li>Personal bests use local-storage keys beginning with <code>pb-</code>.</li>
+      <li>Your language preference is saved as <code>clickspeed.language</code>.</li>
+      <li>These settings remain on the device and browser where you used the site. Clearing site data or local storage removes them.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Website requests and hosting</h2>
+    <p>When your browser requests a page or asset, the hosting infrastructure processes the connection so it can deliver the site. Like other web services, this may involve technical details such as your IP address, request time, requested resource, and browser or device information. Any server logging, retention period, and access controls depend on the hosting provider and its configuration.</p>
+    <p>The site code does not include analytics, advertising, or behavior-tracking scripts. Site fonts are served as part of the website.</p>
+  </section>
+
+  <section>
+    <h2>Cookies</h2>
+    <p>The site application does not set cookies. Browser local storage is separate from cookies and is used for the preferences described above. Hosting or delivery infrastructure may operate independently; its practices depend on the provider.</p>
+  </section>
+
+  <section>
+    <h2>Messages you send us</h2>
+    <p>If you email us, we receive your email address, message, and any information you choose to include. We use it to respond, address the request, and keep relevant correspondence. Your email is handled by the providers used to send and receive it. We retain messages only as long as reasonably needed for those purposes or to meet legal obligations.</p>
+    <p>Please do not include passwords, payment details, or other sensitive information in a support email.</p>
+  </section>
+
+  <section>
+    <h2>Sharing and sale</h2>
+    <p>We do not sell personal information or share it with advertising networks. Information may be handled by service providers needed to host the site or deliver email, and may be disclosed where required by law or necessary to protect the site and its users.</p>
+  </section>
+
+  <section>
+    <h2>Your choices and privacy rights</h2>
+    <p>You can remove saved scores and language preferences through your browser’s site-data settings. Because those values stay in your browser, we cannot retrieve or delete them for you.</p>
+    <p>Depending on where you live, you may have rights to request access to, correction of, or deletion of personal information, or to object to or restrict certain processing. Contact us at <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and describe your request. We may need to verify it and will respond as required by applicable law.</p>
+  </section>
+
+  <section>
+    <h2>Changes to this policy</h2>
+    <p>We may update this policy when the site or its data practices change. The “Last updated” date above indicates the latest revision. The policy in force when you visit this page is the current version.</p>
+  </section>
+</ContentPage>
