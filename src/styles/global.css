@@ -481,3 +481,18 @@ code, pre {
   color: var(--faint);
   margin-bottom: 4px;
 }
+
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+
+  .seo-zone { padding: 28px var(--gutter); }
+  .seo-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .duration-selector { flex-wrap: wrap; }
+  .duration-btn { min-height: 40px; }
+  .readout-hero { font-size: clamp(56px, 18vw, 96px); }
+}

@@ -123,6 +123,11 @@ const { title, description, canonical, currentSlug, jsonLd } = Astro.props;
     }
     .console-main {
       flex-direction: column;
+      min-height: calc(100dvh - 44px);
+    }
+    .console-center {
+      flex: 1;
+      min-height: 0;
     }
     .console-tele {
       width: 100%;
@@ -138,3 +143,29 @@ const { title, description, canonical, currentSlug, jsonLd } = Astro.props;
     }
   }
 </style>
+
+<script>
+  const isEditable = (target: EventTarget | null) =>
+    target instanceof HTMLElement && (
+      target.isContentEditable ||
+      target.matches('input, textarea, select')
+    );
+
+  document.addEventListener('keydown', (event) => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isEditable(event.target)) return;
+
+    const direction = event.key === 'ArrowLeft' || event.key === '[' ? -1
+      : event.key === 'ArrowRight' || event.key === ']' ? 1
+      : 0;
+    if (!direction) return;
+
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.rail-nav-item'));
+    const current = links.findIndex(link => link.getAttribute('aria-current') === 'page');
+    if (current < 0) return;
+
+    event.preventDefault();
+    const next = links[current + direction];
+    if (!next) return;
+    window.location.assign(next.href);
+  });
+</script>

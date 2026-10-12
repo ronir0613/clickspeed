@@ -47,7 +47,8 @@ const descriptions: Record<string, string> = {
   .test-card {
     text-decoration: none;
     display: block;
-    transition: translate var(--t-fast) linear;
+    position: relative;
+    transition: translate var(--t-fast) linear, transform var(--t-fast) linear, box-shadow var(--t-fast) linear;
   }
   .test-card:hover {
     translate: -2px -2px;
@@ -58,6 +59,26 @@ const descriptions: Record<string, string> = {
   }
   .test-card:hover .tc-cta {
     color: var(--accent);
+  }
+  .test-card:focus-visible {
+    z-index: 1;
+    transform: scale(1.035);
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--bg), 0 0 24px var(--accent-dim);
+  }
+  .test-card:focus-visible .panel-inner {
+    background: var(--panel-2);
+  }
+  .test-card:focus-visible .tc-cta {
+    color: var(--accent);
+  }
+  .test-card:focus-visible .tc-cta::before {
+    content: 'SELECTED · ';
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .test-card { transition: none; }
   }
 
   .panel-inner {

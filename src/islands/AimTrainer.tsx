@@ -1,7 +1,9 @@
 import { useAimTrainer } from './engine/useAimTrainer';
+import { useCursorTrail } from './engine/useCursorTrail';
 import { getAimTier } from '../config/tiers';
 
 export default function AimTrainer() {
+  const { arenaRef, canvasRef } = useCursorTrail();
   const {
     state, target, stats, result, TARGET_SIZE_PCT,
     handleArenaClick, reset,
@@ -37,6 +39,7 @@ export default function AimTrainer() {
 
       {/* Arena */}
       <div
+        ref={arenaRef}
         role="button"
         tabIndex={0}
         aria-label={state === 'idle' ? 'Click to start aim training' : 'Aim arena'}
@@ -55,6 +58,12 @@ export default function AimTrainer() {
           backgroundSize: '40px 40px',
         }}
       >
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}
+        />
+
         {/* Corner ticks */}
         {[
           { style: { top: 8, left: 8, borderTop: '2px solid var(--accent)', borderLeft: '2px solid var(--accent)' } },
@@ -62,7 +71,7 @@ export default function AimTrainer() {
           { style: { bottom: 8, left: 8, borderBottom: '2px solid var(--accent)', borderLeft: '2px solid var(--accent)' } },
           { style: { bottom: 8, right: 8, borderBottom: '2px solid var(--accent)', borderRight: '2px solid var(--accent)' } },
         ].map((t, i) => (
-          <div key={i} aria-hidden="true" style={{ position: 'absolute', width: 16, height: 16, pointerEvents: 'none', ...t.style }} />
+          <div key={i} aria-hidden="true" style={{ position: 'absolute', zIndex: 2, width: 16, height: 16, pointerEvents: 'none', ...t.style }} />
         ))}
 
         {/* Target */}
@@ -72,6 +81,7 @@ export default function AimTrainer() {
             aria-hidden="true"
             style={{
               position: 'absolute',
+              zIndex: 2,
               left: `${target.x}%`,
               top: `${target.y}%`,
               width: `${TARGET_SIZE_PCT}%`,
@@ -103,6 +113,8 @@ export default function AimTrainer() {
         {/* Idle / done overlay */}
         {(state === 'idle' || state === 'done') && (
           <div style={{
+            position: 'relative',
+            zIndex: 2,
             textAlign: 'center',
             padding: '0 24px',
             pointerEvents: 'none',

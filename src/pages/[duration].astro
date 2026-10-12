@@ -1,10 +1,10 @@
 ---
-import TestLayout from '../../layouts/TestLayout.astro';
-import CpsTest from '../../islands/CpsTest';
-import OtherTests from '../../components/OtherTests.astro';
-import SiteFooter from '../../components/SiteFooter.astro';
-import { SITE } from '../../config/site';
-import { CPS_DURATION_PAGES } from '../../config/tests';
+import TestLayout from '../layouts/TestLayout.astro';
+import CpsTest from '../islands/CpsTest';
+import OtherTests from '../components/OtherTests.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../config/site';
+import { CPS_DURATION_PAGES } from '../config/tests';
 
 export function getStaticPaths() {
   return CPS_DURATION_PAGES.map(p => ({

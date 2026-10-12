@@ -1,27 +1,33 @@
 import { useCallback, useEffect } from 'react';
 import { useReactionTest } from './engine/useReactionTest';
+import { useCursorTrail } from './engine/useCursorTrail';
 import { getReactionTier } from '../config/tiers';
 
+const REACTION_GREEN = '#39e079';
+
 export default function ReactionTest() {
+  const { arenaRef, canvasRef } = useCursorTrail();
   const {
     state, currentRound, totalRounds, rounds, currentMs, result,
     handleInput, reset,
   } = useReactionTest();
 
-  // Keyboard: any key triggers input (except modifier keys)
+  // Keyboard input starts or advances the test. Arrow keys are reserved for site navigation.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.repeat) return;
       if (['Shift','Control','Alt','Meta','Tab'].includes(e.key)) return;
+      if (['ArrowLeft', 'ArrowRight', '[', ']'].includes(e.key)) return;
       if (e.key === 'Escape') { reset(); return; }
       if (e.key === 'r' || e.key === 'R') { reset(); return; }
+      if (e.code === 'Space') e.preventDefault();
       handleInput();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [handleInput, reset]);
 
-  const bgColor = state === 'ready'  ? 'var(--accent)'
+  const bgColor = state === 'ready'  ? REACTION_GREEN
     : state === 'fault'  ? 'var(--danger)'
     : state === 'done'   ? 'var(--panel-2)'
     : 'var(--bg)';
@@ -33,6 +39,7 @@ export default function ReactionTest() {
     : result ? `AVG ${result.average.toFixed(0)} ms` : '';
 
   const bigColor = state === 'ready'  ? '#0A0A0B'
+    : state === 'done'   ? REACTION_GREEN
     : state === 'fault'  ? 'var(--text)'
     : 'var(--text)';
 
@@ -46,7 +53,7 @@ export default function ReactionTest() {
   const tier = result ? getReactionTier(result.average) : null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%' }}>
+    <div className="reaction-test" style={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%', '--accent': REACTION_GREEN } as React.CSSProperties}>
       {/* Round indicators */}
       <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
         <span className="section-label" style={{ marginBottom: 0, marginRight: '8px' }}>
@@ -56,7 +63,7 @@ export default function ReactionTest() {
           const r = rounds[i];
           const color = !r ? 'var(--line)'
             : r.fault ? 'var(--danger)'
-            : 'var(--accent)';
+            : REACTION_GREEN;
           const txt = r ? (r.fault ? 'F' : `${r.ms.toFixed(0)}`) : '—';
           return (
             <div key={i} style={{
@@ -77,6 +84,7 @@ export default function ReactionTest() {
 
       {/* Arena */}
       <div
+        ref={arenaRef}
         role="button"
         tabIndex={0}
         aria-label={bigLabel}
@@ -85,9 +93,9 @@ export default function ReactionTest() {
         className="arena chamfer-clip-lg"
         style={{
           flex: 1,
-          minHeight: '55vh',
+          minHeight: 'clamp(280px, 55vh, 640px)',
           background: bgColor,
-          border: `2px solid ${state === 'ready' ? 'var(--accent)' : state === 'fault' ? 'var(--danger)' : 'var(--line)'}`,
+          border: `2px solid ${state === 'ready' ? REACTION_GREEN : state === 'fault' ? 'var(--danger)' : 'var(--line)'}`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -97,10 +105,17 @@ export default function ReactionTest() {
           transition: 'background 80ms linear, border-color 80ms linear',
         }}
       >
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}
+        />
+
         {/* Corner ticks */}
         {['tl','tr','bl','br'].map(pos => (
           <div key={pos} aria-hidden="true" style={{
             position: 'absolute',
+            zIndex: 2,
             width: 16, height: 16,
             ...(pos === 'tl' ? { top: 8, left: 8, borderTop: '2px solid var(--accent)', borderLeft: '2px solid var(--accent)' } : {}),
             ...(pos === 'tr' ? { top: 8, right: 8, borderTop: '2px solid var(--accent)', borderRight: '2px solid var(--accent)' } : {}),
@@ -112,7 +127,7 @@ export default function ReactionTest() {
           }} />
         ))}
 
-        <div style={{ textAlign: 'center', pointerEvents: 'none', padding: '0 24px' }}>
+        <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', pointerEvents: 'none', padding: '0 24px' }}>
           {/* Big readout */}
           {currentMs !== null && state !== 'waiting' && state !== 'ready' && (
             <div className="readout readout-hero" style={{ color: bigColor }} aria-live="polite">
@@ -151,7 +166,7 @@ export default function ReactionTest() {
               <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap' }}>
                 <div style={{ textAlign: 'center' }}>
                   <div className="stat-label">AVERAGE</div>
-                  <div className="readout readout-sm" style={{ color: 'var(--accent)' }}>
+                  <div className="readout readout-sm" style={{ color: REACTION_GREEN }}>
                     {result.average.toFixed(0)} ms
                   </div>
                 </div>
@@ -173,6 +188,7 @@ export default function ReactionTest() {
         {state === 'fault' && (
           <div style={{
             position: 'absolute',
+            zIndex: 2,
             bottom: 24,
             fontFamily: 'var(--font-mono)',
             fontSize: '0.75rem',
